@@ -59,7 +59,7 @@
                     android:id="@+id/mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Re-enter your Mobile number"
+                    android:hint="Mobile number"
                     android:inputType="number" />
 
                 <TextView
