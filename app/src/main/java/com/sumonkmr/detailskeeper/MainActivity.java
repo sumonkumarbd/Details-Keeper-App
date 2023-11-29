@@ -102,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
     private void SetValue() {
         notes = new ArrayList<>();
         notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
         notes.add(getNotesTemp("Hello World!","This is my first massage!"));
         notes.add(getNotesTemp("Hello World!","This is my first massage!"));
 
