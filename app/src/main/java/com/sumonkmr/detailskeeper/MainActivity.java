@@ -7,13 +7,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -24,11 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     RecyclerView myRecView;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+   static SharedPreferences sharedPreferences;
+   static SharedPreferences.Editor editor;
     HashMap<String, String> notesTemp;
     List<HashMap<String, String>> notes;
-    EditText name, email, phone, address;
+    String savedTitle, savedMassage;
+    EditText titleEd, massageEd;
+    FloatingActionButton floatingBtn;
+    AlertDialog alertDialog;
 
 
     @Override
@@ -43,11 +55,64 @@ public class MainActivity extends AppCompatActivity {
         SetValue();
         GetValue();
 
+        floatingBtn.setOnClickListener(v-> {
+            FloatingDialog(this);
+        });
 
     }//onCreate
 
+    private void FloatingDialog(Context context) {
+        // Create an AlertDialog.Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate the custom layout for the dialog
+        View customView = inflater.inflate(R.layout.alert_dialog, null);
+
+        // Set the custom view to the AlertDialog
+        builder.setView(customView);
+
+        // Get references to views in the custom layout if needed
+        Button okButton = customView.findViewById(R.id.submit);
+        Button cancelButton = customView.findViewById(R.id.cencel);
+        EditText titleEd = customView.findViewById(R.id.titleEd);
+        EditText massageEd = customView.findViewById(R.id.massageEd);
+
+        // Set click listeners for buttons in the custom layout
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle OK button click
+                // You can add code here to handle the OK button click
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle Cancel button click
+                // You can add code here to handle the Cancel button click
+                alertDialog.dismiss();
+            }
+        });
+
+        // Create and show the AlertDialog
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public void GetValue() {
+        // Retrieve data from SharedPreferences if available, otherwise use default values
+        savedTitle = sharedPreferences.getString("title", "Title is not Found!");
+        savedMassage = sharedPreferences.getString("massage", "Massage is not Found!");
+        Log.d("onBindViewHolder", "onBindViewHolder: "+savedTitle+" "+ savedMassage);
+    }
+
     private void HookUps() {
         myRecView = findViewById(R.id.myRecView);
+        floatingBtn = findViewById(R.id.floatingBtn);
     }
 
     public void DrawerSetup() {
@@ -99,20 +164,26 @@ public class MainActivity extends AppCompatActivity {
         return notesTemp;
     }
 
+//    private void SetValue(EditText titleEd, EditText massageEd) {
+//        notes = new ArrayList<>();
+//        notes.add(getNotesTemp(String.valueOf(titleEd),String.valueOf(massageEd)));
+//
+//
+//
+//        myAdapter adapter = new myAdapter(this,notes);
+//        myRecView.setAdapter(adapter);
+//        myRecView.setLayoutManager(new LinearLayoutManager(this));
+//    }
     private void SetValue() {
         notes = new ArrayList<>();
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage! This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
-        notes.add(getNotesTemp("Hello World!","This is my first massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
+        notes.add(getNotesTemp("this is Title","this is Massage!"));
 
 
 
@@ -121,10 +192,6 @@ public class MainActivity extends AppCompatActivity {
         myRecView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void GetValue(){
-        String nameString = sharedPreferences.getString("name", "Nothing found!");
-        String phoneString = sharedPreferences.getString("phone", "Nothing found!");
-    }
 
     public void ShowToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
