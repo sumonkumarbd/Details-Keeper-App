@@ -1,5 +1,6 @@
 package com.sumonkmr.detailskeeper;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -33,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     RecyclerView myRecView;
-   static SharedPreferences sharedPreferences;
-   static SharedPreferences.Editor editor;
+   SharedPreferences sharedPreferences;
+   SharedPreferences.Editor editor;
     HashMap<String, String> notesTemp;
     List<HashMap<String, String>> notes;
     String savedTitle, savedMassage;
@@ -48,12 +49,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(String.valueOf(R.string.app_name), MODE_PRIVATE);
-        editor = sharedPreferences.edit();
         //Method's
         HookUps();
         DrawerSetup();
-        SetValue();
-        GetValue();
 
         floatingBtn.setOnClickListener(v-> {
             FloatingDialog(this);
@@ -85,7 +83,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Handle OK button click
-                // You can add code here to handle the OK button click
+                // You can add code here to handle the OK button click'
+                if (String.valueOf(titleEd).isEmpty() && String.valueOf(titleEd).length() == 0 && String.valueOf(massageEd).isEmpty() && String.valueOf(massageEd).length() == 0){
+                    ShowToast("Please Write your note properly!");
+                }else {
+                    SetValue(titleEd,massageEd);
+                    ShowToast("Note add successfully!");
+                    alertDialog.dismiss();
+                }
+
             }
         });
 
@@ -103,12 +109,6 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void GetValue() {
-        // Retrieve data from SharedPreferences if available, otherwise use default values
-        savedTitle = sharedPreferences.getString("title", "Title is not Found!");
-        savedMassage = sharedPreferences.getString("massage", "Massage is not Found!");
-        Log.d("onBindViewHolder", "onBindViewHolder: "+savedTitle+" "+ savedMassage);
-    }
 
     private void HookUps() {
         myRecView = findViewById(R.id.myRecView);
@@ -164,34 +164,13 @@ public class MainActivity extends AppCompatActivity {
         return notesTemp;
     }
 
-//    private void SetValue(EditText titleEd, EditText massageEd) {
-//        notes = new ArrayList<>();
-//        notes.add(getNotesTemp(String.valueOf(titleEd),String.valueOf(massageEd)));
-//
-//
-//
-//        myAdapter adapter = new myAdapter(this,notes);
-//        myRecView.setAdapter(adapter);
-//        myRecView.setLayoutManager(new LinearLayoutManager(this));
-//    }
-    private void SetValue() {
+    public void SetValue(EditText titleEd, EditText massageEd) {
         notes = new ArrayList<>();
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-        notes.add(getNotesTemp("this is Title","this is Massage!"));
-
-
-
-        myAdapter adapter = new myAdapter(this,notes);
+        notes.add(getNotesTemp(titleEd.getText().toString(),massageEd.getText().toString()));
+        myAdapter adapter = new myAdapter(this,sharedPreferences,editor,notes);
         myRecView.setAdapter(adapter);
         myRecView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 
     public void ShowToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
